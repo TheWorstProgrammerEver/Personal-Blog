@@ -32,9 +32,13 @@ export const getPublishedArticles = () => getArticles({ includeDrafts: false })
 export const getArticleBySlug = async (
   slug: string,
   options: ArticleQueryOptions = {}
-) => (await getArticles(options)).find((article) => getArticleSlug(article) === slug)
+) =>
+  (await getArticles(options))
+    .find((article) => getArticleSlug(article) === slug)
 
 export const getArticleTags = async (options: ArticleQueryOptions = {}) =>
-  [...new Set((await getArticles(options)).flatMap(({ data }) => data.tags))].sort(
-    (a, b) => a.localeCompare(b)
-  )
+  [...new Set(
+    (await getArticles(options))
+      .flatMap(({ data }) => data.tags)
+  )]
+    .sort((a, b) => a.localeCompare(b))
