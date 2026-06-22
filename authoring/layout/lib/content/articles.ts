@@ -14,6 +14,11 @@ const sortArticles = (articles: Article[]) =>
   [...articles]
     .sort(descendingByCreated)
 
+let articleCollection: Promise<Article[]> | undefined
+
+const getArticleCollection = () =>
+  articleCollection ??= getCollection("articles")
+
 export const isDraftArticle = (article: Article) => article.data.status === "draft"
 
 export const isPublishedArticle = (article: Article) => article.data.status === "published"
@@ -43,7 +48,10 @@ export const shouldIncludeDraftArticles = () =>
 const getArticlesMatching = async (
   predicate: (article: Article) => boolean
 ) =>
-  sortArticles(await getCollection("articles", predicate))
+  sortArticles(
+    (await getArticleCollection())
+      .filter(predicate)
+  )
 
 export const getVisibleArticles = (
   { includeDrafts = shouldIncludeDraftArticles() }: ArticleQueryOptions = {}
