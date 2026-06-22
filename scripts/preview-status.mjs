@@ -1,3 +1,3 @@
-import { runAstro } from "./astro-command.mjs";
+import { runAstro } from "./astro-command.mjs"
 
-runAstro(["dev", "status"]);
+runAstro(["dev", "status"])

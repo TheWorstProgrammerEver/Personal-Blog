@@ -1,52 +1,40 @@
-import { getCollection } from "astro:content";
-import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content"
+import type { CollectionEntry } from "astro:content"
 
-export type Article = CollectionEntry<"articles">;
-export type ArticleStatus = Article["data"]["status"];
+export type Article = CollectionEntry<"articles">
 
 type ArticleQueryOptions = {
-  includeDrafts?: boolean;
-};
+  includeDrafts?: boolean
+}
 
 const descendingByCreated = (a: Article, b: Article) =>
-  b.data.created.getTime() - a.data.created.getTime();
+  b.data.created.getTime() - a.data.created.getTime()
 
-export const getArticleSlug = (article: Article) => article.id;
+const sortArticles = (articles: Article[]) => articles.sort(descendingByCreated)
+
+export const getArticleSlug = (article: Article) => article.id
 
 export const shouldIncludeDraftArticles = () =>
-  import.meta.env.BLOG_INCLUDE_DRAFTS === "true" || !import.meta.env.PROD;
+  import.meta.env.BLOG_INCLUDE_DRAFTS === "true" || !import.meta.env.PROD
 
-export async function getArticles(options: ArticleQueryOptions = {}) {
-  const includeDrafts = options.includeDrafts ?? shouldIncludeDraftArticles();
-  const articles = await getCollection("articles", ({ data }) => {
-    return includeDrafts || data.status === "published";
-  });
+export const getArticles = async (
+  { includeDrafts = shouldIncludeDraftArticles() }: ArticleQueryOptions = {}
+) =>
+  sortArticles(
+    await getCollection(
+      "articles",
+      ({ data }) => includeDrafts || data.status === "published"
+    )
+  )
 
-  return articles.sort(descendingByCreated);
-}
+export const getPublishedArticles = () => getArticles({ includeDrafts: false })
 
-export async function getPublishedArticles() {
-  const articles = await getCollection("articles", ({ data }) => {
-    return data.status === "published";
-  });
+export const getArticleBySlug = async (
+  slug: string,
+  options: ArticleQueryOptions = {}
+) => (await getArticles(options)).find((article) => getArticleSlug(article) === slug)
 
-  return articles.sort(descendingByCreated);
-}
-
-export async function getArticleBySlug(slug: string, options: ArticleQueryOptions = {}) {
-  const articles = await getArticles(options);
-  return articles.find((article) => getArticleSlug(article) === slug);
-}
-
-export async function getArticleTags(options: ArticleQueryOptions = {}) {
-  const articles = await getArticles(options);
-  const tags = new Set<string>();
-
-  for (const article of articles) {
-    for (const tag of article.data.tags) {
-      tags.add(tag);
-    }
-  }
-
-  return [...tags].sort((a, b) => a.localeCompare(b));
-}
+export const getArticleTags = async (options: ArticleQueryOptions = {}) =>
+  [...new Set((await getArticles(options)).flatMap(({ data }) => data.tags))].sort(
+    (a, b) => a.localeCompare(b)
+  )

@@ -1,4 +1,4 @@
-import { defineConfig } from "astro/config";
+import { defineConfig } from "astro/config"
 
 export default defineConfig({
   srcDir: "./authoring/layout",
@@ -6,4 +6,4 @@ export default defineConfig({
   build: {
     format: "directory"
   }
-});
+})
