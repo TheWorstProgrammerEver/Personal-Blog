@@ -20,7 +20,7 @@ export const isPublishedArticle = (article: Article) => article.data.status === 
 
 export const getArticleSlug = (article: Article) => article.id
 
-export const getArticleUrl = (article: Article) => `/writing/${getArticleSlug(article)}/`
+export const getArticleUrl = (article: Article) => `/posts/${getArticleSlug(article)}/`
 
 export const shouldIncludeDraftArticles = () =>
   import.meta.env.BLOG_INCLUDE_DRAFTS === "true" || !import.meta.env.PROD
