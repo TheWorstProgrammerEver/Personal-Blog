@@ -1,21 +1,13 @@
 ---
 import { getArticles } from "../lib/content/articles"
-import "../styles/reset.scss"
+import { siteTitle } from "../lib/site"
+import SiteDocument from "../components/SiteDocument.astro"
 
 const articleCount = (await getArticles()).length
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Ryan Hayward&apos;s Blog</title>
-  </head>
-  <body>
-    <main data-article-count={articleCount}>
-      <h1>Ryan Hayward&apos;s Blog</h1>
-    </main>
-  </body>
-</html>
+<SiteDocument title={siteTitle}>
+  <main data-article-count={articleCount}>
+    <h1>{siteTitle}</h1>
+  </main>
+</SiteDocument>

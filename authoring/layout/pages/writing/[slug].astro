@@ -1,0 +1,42 @@
+---
+import { render } from "astro:content"
+import SiteDocument from "../../components/SiteDocument.astro"
+import { getArticles, getArticleSlug } from "../../lib/content/articles"
+import { getPageTitle, siteTitle } from "../../lib/site"
+
+export const getStaticPaths = async () =>
+  (await getArticles())
+    .map((article) => ({
+      params: { slug: getArticleSlug(article) },
+      props: { article }
+    }))
+
+const { article } = Astro.props
+const { Content } = await render(article)
+const dateFormatter = new Intl.DateTimeFormat("en-AU", { dateStyle: "medium" })
+---
+
+<SiteDocument title={getPageTitle(article.data.title)}>
+  <main>
+    <article>
+      <header>
+        <p><a href="/">{siteTitle}</a></p>
+        <h1>{article.data.title}</h1>
+        {article.data.subtitle && <p>{article.data.subtitle}</p>}
+        <p>
+          <time datetime={article.data.created.toISOString()}>
+            {dateFormatter.format(article.data.created)}
+          </time>
+        </p>
+        {
+          article.data.tags.length > 0 && (
+            <ul aria-label="Tags">
+              {article.data.tags.map((tag) => <li>{tag}</li>)}
+            </ul>
+          )
+        }
+      </header>
+      <Content />
+    </article>
+  </main>
+</SiteDocument>
