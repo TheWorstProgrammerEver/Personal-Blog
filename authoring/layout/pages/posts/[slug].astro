@@ -21,27 +21,29 @@ const { Content } = await render(article)
 ---
 
 <SiteDocument title={getPageTitle(article.data.title)}>
-  <main>
-    <article>
-      <header>
-        <p><a href="/">{siteTitle}</a></p>
+  <main class="post-shell">
+    <article class="post">
+      <header class="post__header">
+        <p class="site-backlink"><a href="/">{siteTitle}</a></p>
         <h1>{article.data.title}</h1>
-        {isDraftArticle(article) && <p>Draft</p>}
-        {article.data.subtitle && <p>{article.data.subtitle}</p>}
-        <p>
+        {isDraftArticle(article) && <p class="draft-marker">Draft</p>}
+        {article.data.subtitle && <p class="post__subtitle">{article.data.subtitle}</p>}
+        <p class="post__meta">
           <time datetime={article.data.created.toISOString()}>
             {formatArticleDate(article.data.created)}
           </time>
         </p>
         {
           article.data.tags.length > 0 && (
-            <ul aria-label="Tags">
+            <ul class="post__tags" aria-label="Tags" role="list">
               {article.data.tags.map((tag) => <li>{tag}</li>)}
             </ul>
           )
         }
       </header>
-      <Content />
+      <div class="prose">
+        <Content />
+      </div>
     </article>
   </main>
 </SiteDocument>

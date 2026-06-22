@@ -13,19 +13,22 @@ const articleCount = articles.length
 ---
 
 <SiteDocument title={siteTitle}>
-  <main data-article-count={articleCount}>
-    <h1>{siteTitle}</h1>
-    <ol>
+  <main class="home" data-article-count={articleCount}>
+    <header class="home__header">
+      <p class="site-mark">日々</p>
+      <h1>{siteTitle}</h1>
+    </header>
+    <ol class="post-list" role="list">
       {
         articles.map((article) => (
-          <li>
-            <article data-article-status={article.data.status}>
+          <li class="post-list__item">
+            <article class="post-card" data-article-status={article.data.status}>
               <h2>
                 <a href={getArticleUrl(article)}>{article.data.title}</a>
               </h2>
-              {isDraftArticle(article) && <p>Draft</p>}
-              {article.data.subtitle && <p>{article.data.subtitle}</p>}
-              <p>
+              {isDraftArticle(article) && <p class="draft-marker">Draft</p>}
+              {article.data.subtitle && <p class="post-card__summary">{article.data.subtitle}</p>}
+              <p class="post-card__meta">
                 <time datetime={article.data.created.toISOString()}>
                   {formatArticleDate(article.data.created)}
                 </time>
