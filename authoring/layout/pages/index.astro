@@ -1,5 +1,8 @@
 ---
+import { getArticles } from "../lib/content/articles";
 import "../styles/reset.scss";
+
+const articleCount = (await getArticles()).length;
 ---
 
 <!doctype html>
@@ -11,7 +14,7 @@ import "../styles/reset.scss";
     <title>Ryan Hayward&apos;s Blog</title>
   </head>
   <body>
-    <main>
+    <main data-article-count={articleCount}>
       <h1>Ryan Hayward&apos;s Blog</h1>
     </main>
   </body>
