@@ -1,7 +1,12 @@
 ---
 import { render } from "astro:content"
 import SiteDocument from "../../components/SiteDocument.astro"
-import { getArticles, getArticleSlug } from "../../lib/content/articles"
+import {
+  getArticles,
+  getArticleSlug,
+  isDraftArticle
+} from "../../lib/content/articles"
+import { formatArticleDate } from "../../lib/dates"
 import { getPageTitle, siteTitle } from "../../lib/site"
 
 export const getStaticPaths = async () =>
@@ -13,7 +18,6 @@ export const getStaticPaths = async () =>
 
 const { article } = Astro.props
 const { Content } = await render(article)
-const dateFormatter = new Intl.DateTimeFormat("en-AU", { dateStyle: "medium" })
 ---
 
 <SiteDocument title={getPageTitle(article.data.title)}>
@@ -22,10 +26,11 @@ const dateFormatter = new Intl.DateTimeFormat("en-AU", { dateStyle: "medium" })
       <header>
         <p><a href="/">{siteTitle}</a></p>
         <h1>{article.data.title}</h1>
+        {isDraftArticle(article) && <p>Draft</p>}
         {article.data.subtitle && <p>{article.data.subtitle}</p>}
         <p>
           <time datetime={article.data.created.toISOString()}>
-            {dateFormatter.format(article.data.created)}
+            {formatArticleDate(article.data.created)}
           </time>
         </p>
         {

@@ -10,7 +10,13 @@ type ArticleQueryOptions = {
 const descendingByCreated = (a: Article, b: Article) =>
   b.data.created.getTime() - a.data.created.getTime()
 
-const sortArticles = (articles: Article[]) => articles.sort(descendingByCreated)
+const sortArticles = (articles: Article[]) =>
+  [...articles]
+    .sort(descendingByCreated)
+
+export const isDraftArticle = (article: Article) => article.data.status === "draft"
+
+export const isPublishedArticle = (article: Article) => article.data.status === "published"
 
 export const getArticleSlug = (article: Article) => article.id
 
@@ -25,11 +31,17 @@ export const getArticles = async (
   sortArticles(
     await getCollection(
       "articles",
-      ({ data }) => includeDrafts || data.status === "published"
+      (article) => includeDrafts || isPublishedArticle(article)
     )
   )
 
 export const getPublishedArticles = () => getArticles({ includeDrafts: false })
+
+export const getDraftArticles = async () =>
+  sortArticles(
+    (await getCollection("articles"))
+      .filter(isDraftArticle)
+  )
 
 export const getArticleBySlug = async (
   slug: string,

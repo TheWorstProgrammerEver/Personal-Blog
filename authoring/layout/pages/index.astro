@@ -1,11 +1,15 @@
 ---
-import { getArticles, getArticleUrl } from "../lib/content/articles"
+import {
+  getArticles,
+  getArticleUrl,
+  isDraftArticle
+} from "../lib/content/articles"
+import { formatArticleDate } from "../lib/dates"
 import { siteTitle } from "../lib/site"
 import SiteDocument from "../components/SiteDocument.astro"
 
 const articles = await getArticles()
 const articleCount = articles.length
-const dateFormatter = new Intl.DateTimeFormat("en-AU", { dateStyle: "medium" })
 ---
 
 <SiteDocument title={siteTitle}>
@@ -15,14 +19,15 @@ const dateFormatter = new Intl.DateTimeFormat("en-AU", { dateStyle: "medium" })
       {
         articles.map((article) => (
           <li>
-            <article>
+            <article data-article-status={article.data.status}>
               <h2>
                 <a href={getArticleUrl(article)}>{article.data.title}</a>
               </h2>
+              {isDraftArticle(article) && <p>Draft</p>}
               {article.data.subtitle && <p>{article.data.subtitle}</p>}
               <p>
                 <time datetime={article.data.created.toISOString()}>
-                  {dateFormatter.format(article.data.created)}
+                  {formatArticleDate(article.data.created)}
                 </time>
               </p>
             </article>
