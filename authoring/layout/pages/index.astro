@@ -5,14 +5,17 @@ import {
   isDraftArticle
 } from "../lib/content/articles"
 import { formatArticleDate } from "../lib/dates"
-import { siteTitle } from "../lib/site"
+import {
+  siteDescription,
+  siteTitle
+} from "../lib/site"
 import SiteDocument from "../components/SiteDocument.astro"
 
 const articles = await getArticles()
 const articleCount = articles.length
 ---
 
-<SiteDocument title={siteTitle}>
+<SiteDocument title={siteTitle} description={siteDescription} canonicalPath="/">
   <main class="home" data-article-count={articleCount}>
     <header class="home__header">
       <h1>{siteTitle}</h1>

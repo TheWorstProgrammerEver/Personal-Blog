@@ -1,13 +1,13 @@
 ---
 import { render } from "astro:content"
-import SiteDocument from "../../components/SiteDocument.astro"
+import ArticleDocument from "../../components/ArticleDocument.astro"
 import {
   getArticles,
   getArticleSlug,
   isDraftArticle
 } from "../../lib/content/articles"
 import { formatArticleDate } from "../../lib/dates"
-import { getPageTitle, siteTitle } from "../../lib/site"
+import { siteTitle } from "../../lib/site"
 
 export const getStaticPaths = async () =>
   (await getArticles())
@@ -20,7 +20,7 @@ const { article } = Astro.props
 const { Content } = await render(article)
 ---
 
-<SiteDocument title={getPageTitle(article.data.title)}>
+<ArticleDocument article={article}>
   <main class="post-shell">
     <article class="post">
       <header class="post__header">
@@ -46,4 +46,4 @@ const { Content } = await render(article)
       </div>
     </article>
   </main>
-</SiteDocument>
+</ArticleDocument>

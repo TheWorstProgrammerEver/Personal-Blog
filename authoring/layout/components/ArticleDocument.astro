@@ -1,0 +1,42 @@
+---
+import type { Article } from "../lib/content/articles"
+import SiteDocument from "./SiteDocument.astro"
+import {
+  getArticleUrl,
+  isDraftArticle
+} from "../lib/content/articles"
+import {
+  getPageTitle,
+  siteDescription
+} from "../lib/site"
+
+interface Props {
+  article: Article
+}
+
+const { article } = Astro.props
+---
+
+<SiteDocument
+  title={getPageTitle(article.data.title)}
+  metaTitle={article.data.title}
+  description={article.data.subtitle ?? siteDescription}
+  canonicalPath={getArticleUrl(article)}
+  noindex={isDraftArticle(article)}
+  openGraphType="article"
+>
+  <Fragment slot="head">
+    <meta property="article:published_time" content={article.data.created.toISOString()} />
+    {
+      article.data.updated && (
+        <meta property="article:modified_time" content={article.data.updated.toISOString()} />
+      )
+    }
+    {
+      article.data.tags.map((tag) => (
+        <meta property="article:tag" content={tag} />
+      ))
+    }
+  </Fragment>
+  <slot />
+</SiteDocument>

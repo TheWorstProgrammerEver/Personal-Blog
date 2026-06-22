@@ -1,16 +1,62 @@
 ---
 import "../styles/reset.scss"
 import "../styles/site.scss"
+import {
+  getCanonicalUrl,
+  rssFeedPath,
+  sitemapPath,
+  siteDescription,
+  siteLanguage,
+  siteLocale,
+  siteTitle
+} from "../lib/site"
 
-const { title } = Astro.props
+type OpenGraphType = "website" | "article"
+
+interface Props {
+  title: string
+  description?: string
+  canonicalPath?: string
+  metaTitle?: string
+  noindex?: boolean
+  openGraphType?: OpenGraphType
+}
+
+const {
+  title,
+  canonicalPath = Astro.url.pathname,
+  description = siteDescription,
+  metaTitle = title,
+  noindex = false,
+  openGraphType = "website"
+} = Astro.props
+
+const canonicalUrl = getCanonicalUrl(canonicalPath, Astro.site ?? Astro.url)
+const rssFeedUrl = getCanonicalUrl(rssFeedPath, Astro.site ?? Astro.url)
+const sitemapUrl = getCanonicalUrl(sitemapPath, Astro.site ?? Astro.url)
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={siteLanguage}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow"} />
+    <link rel="canonical" href={canonicalUrl.href} />
+    <link rel="alternate" type="application/rss+xml" title={siteTitle} href={rssFeedUrl.href} />
+    <link rel="sitemap" type="application/xml" href={sitemapUrl.href} />
+    <meta property="og:site_name" content={siteTitle} />
+    <meta property="og:title" content={metaTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={openGraphType} />
+    <meta property="og:url" content={canonicalUrl.href} />
+    <meta property="og:locale" content={siteLocale} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={metaTitle} />
+    <meta name="twitter:description" content={description} />
+    <slot name="head" />
     <title>{title}</title>
   </head>
   <body>
