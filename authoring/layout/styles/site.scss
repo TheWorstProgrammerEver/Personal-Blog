@@ -83,19 +83,6 @@ a:focus-visible {
   max-width: var(--measure);
 }
 
-.site-mark {
-  display: inline-grid;
-  width: 2.75rem;
-  height: 2.75rem;
-  place-items: center;
-  margin: 0;
-  border: 1px solid var(--accent);
-  color: var(--accent);
-  font-size: 0.78rem;
-  font-weight: 700;
-  line-height: 1;
-}
-
 h1,
 h2,
 h3 {
