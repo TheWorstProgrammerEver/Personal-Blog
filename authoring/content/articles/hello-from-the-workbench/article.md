@@ -12,7 +12,7 @@ status: published
 
 This is the first article-shaped object in the system.
 
-![A simple card-style workbench illustration.](./assets/workbench-card.svg)
+![A simple card-style workbench illustration.](./workbench-card.svg)
 
 It is intentionally small: enough frontmatter to validate the content model,
 enough Markdown to prove the authoring loop, and nothing that decides the final
