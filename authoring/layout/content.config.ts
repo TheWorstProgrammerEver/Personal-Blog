@@ -15,7 +15,7 @@ const articles = defineCollection({
     updated: z.coerce.date().optional(),
     author: z.string().default("Ryan Hayward"),
     tags: z.array(z.string()).default([]),
-    status: z.enum(["draft", "published"]).default("draft")
+    status: z.enum(["draft", "published", "archived"]).default("draft")
   })
 })
 

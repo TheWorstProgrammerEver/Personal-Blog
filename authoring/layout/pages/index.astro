@@ -1,17 +1,15 @@
 ---
 import {
-  getArticles,
-  getArticleUrl,
-  isDraftArticle
+  getListedArticles
 } from "../lib/content/articles"
-import { formatArticleDate } from "../lib/dates"
 import {
   siteDescription,
   siteTitle
 } from "../lib/site"
+import PostList from "../components/PostList.astro"
 import SiteDocument from "../components/SiteDocument.astro"
 
-const articles = await getArticles()
+const articles = await getListedArticles()
 const articleCount = articles.length
 ---
 
@@ -19,26 +17,11 @@ const articleCount = articles.length
   <main class="home" data-article-count={articleCount}>
     <header class="home__header">
       <h1>{siteTitle}</h1>
+      <nav class="site-nav" aria-label="Site">
+        <a href="/tags/">Tags</a>
+        <a href="/search/">Search</a>
+      </nav>
     </header>
-    <ol class="post-list" role="list">
-      {
-        articles.map((article) => (
-          <li class="post-list__item">
-            <article class="post-card" data-article-status={article.data.status}>
-              <h2>
-                <a href={getArticleUrl(article)}>{article.data.title}</a>
-              </h2>
-              {isDraftArticle(article) && <p class="draft-marker">Draft</p>}
-              {article.data.subtitle && <p class="post-card__summary">{article.data.subtitle}</p>}
-              <p class="post-card__meta">
-                <time datetime={article.data.created.toISOString()}>
-                  {formatArticleDate(article.data.created)}
-                </time>
-              </p>
-            </article>
-          </li>
-        ))
-      }
-    </ol>
+    <PostList articles={articles} />
   </main>
 </SiteDocument>

@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro"
 import {
   getArticleUrl,
-  getPublishedArticles
+  getRoutableArticles
 } from "../lib/content/articles"
 import { escapeXml, xmlResponse } from "../lib/xml"
 import { getCanonicalUrl } from "../lib/site"
@@ -17,7 +17,7 @@ const getSitemapEntry = (url: string, lastModified?: Date) =>
 const getSitemapEntries = async (baseUrl: string | URL) =>
   [
     getSitemapEntry(getCanonicalUrl("/", baseUrl).href),
-    ...(await getPublishedArticles())
+    ...(await getRoutableArticles({ includeDrafts: false }))
       .map((article) =>
         getSitemapEntry(
           getCanonicalUrl(getArticleUrl(article), baseUrl).href,

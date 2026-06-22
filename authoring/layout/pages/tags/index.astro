@@ -1,0 +1,36 @@
+---
+import SiteDocument from "../../components/SiteDocument.astro"
+import { getArticleTagSummaries } from "../../lib/content/articles"
+import {
+  getPageTitle,
+  siteDescription
+} from "../../lib/site"
+
+const tags = await getArticleTagSummaries()
+---
+
+<SiteDocument
+  title={getPageTitle("Tags")}
+  metaTitle="Tags"
+  description={siteDescription}
+  canonicalPath="/tags/"
+>
+  <main class="page">
+    <header class="page__header">
+      <p class="site-backlink"><a href="/">Ryan Hayward's Blog</a></p>
+      <h1>Tags</h1>
+    </header>
+    <ul class="tag-cloud" aria-label="Tags" role="list">
+      {
+        tags.map((tag) => (
+          <li>
+            <a href={tag.url}>
+              <span>{tag.name}</span>
+              <span>{tag.count}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </main>
+</SiteDocument>

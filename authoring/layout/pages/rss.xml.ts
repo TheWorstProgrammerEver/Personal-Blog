@@ -2,7 +2,7 @@ import rss from "@astrojs/rss"
 import type { APIRoute } from "astro"
 import {
   getArticleUrl,
-  getPublishedArticles
+  getListedArticles
 } from "../lib/content/articles"
 import {
   siteDescription,
@@ -16,7 +16,7 @@ export const GET: APIRoute = async (context) =>
     description: siteDescription,
     site: context.site ?? context.url,
     customData: `<language>${siteLanguage}</language>`,
-    items: (await getPublishedArticles())
+    items: (await getListedArticles({ includeDrafts: false }))
       .map((article) => ({
         title: article.data.title,
         description: article.data.subtitle ?? siteDescription,

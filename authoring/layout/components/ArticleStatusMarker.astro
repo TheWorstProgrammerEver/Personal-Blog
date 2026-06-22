@@ -1,0 +1,19 @@
+---
+import type { Article } from "../lib/content/articles"
+
+interface Props {
+  article: Article
+}
+
+const { article } = Astro.props
+
+const statusLabels = {
+  archived: "Archived",
+  draft: "Draft",
+  published: ""
+}
+
+const label = statusLabels[article.data.status]
+---
+
+{label && <p class="status-marker" data-article-status={article.data.status}>{label}</p>}

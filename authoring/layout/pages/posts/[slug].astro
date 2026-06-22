@@ -1,16 +1,17 @@
 ---
 import { render } from "astro:content"
 import ArticleDocument from "../../components/ArticleDocument.astro"
+import ArticleStatusMarker from "../../components/ArticleStatusMarker.astro"
 import {
-  getArticles,
+  getRoutableArticles,
   getArticleSlug,
-  isDraftArticle
+  getTagUrl
 } from "../../lib/content/articles"
 import { formatArticleDate } from "../../lib/dates"
 import { siteTitle } from "../../lib/site"
 
 export const getStaticPaths = async () =>
-  (await getArticles())
+  (await getRoutableArticles())
     .map((article) => ({
       params: { slug: getArticleSlug(article) },
       props: { article }
@@ -26,7 +27,7 @@ const { Content } = await render(article)
       <header class="post__header">
         <p class="site-backlink"><a href="/">{siteTitle}</a></p>
         <h1>{article.data.title}</h1>
-        {isDraftArticle(article) && <p class="draft-marker">Draft</p>}
+        <ArticleStatusMarker article={article} />
         {article.data.subtitle && <p class="post__subtitle">{article.data.subtitle}</p>}
         <p class="post__meta">
           <time datetime={article.data.created.toISOString()}>
@@ -36,7 +37,7 @@ const { Content } = await render(article)
         {
           article.data.tags.length > 0 && (
             <ul class="post__tags" aria-label="Tags" role="list">
-              {article.data.tags.map((tag) => <li>{tag}</li>)}
+              {article.data.tags.map((tag) => <li><a href={getTagUrl(tag)}>{tag}</a></li>)}
             </ul>
           )
         }

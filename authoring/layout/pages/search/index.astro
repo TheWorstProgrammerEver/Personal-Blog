@@ -1,0 +1,176 @@
+---
+import PostList from "../../components/PostList.astro"
+import SiteDocument from "../../components/SiteDocument.astro"
+import {
+  getArticleTags,
+  getSearchIndexEntries,
+  getSearchableArticles
+} from "../../lib/content/articles"
+import {
+  getPageTitle,
+  siteDescription
+} from "../../lib/site"
+
+const articles = await getSearchableArticles()
+const tags = await getArticleTags()
+const searchIndexJson = JSON.stringify(await getSearchIndexEntries())
+  .replace(/</g, "\\u003c")
+---
+
+<SiteDocument
+  title={getPageTitle("Search")}
+  metaTitle="Search"
+  description={siteDescription}
+  canonicalPath="/search/"
+>
+  <main class="page search-page">
+    <header class="page__header">
+      <p class="site-backlink"><a href="/">Ryan Hayward's Blog</a></p>
+      <h1>Search</h1>
+    </header>
+    <section class="search-panel" data-search-root>
+      <label class="visually-hidden" for="search-input">Search posts</label>
+      <input
+        id="search-input"
+        class="search-input"
+        data-search-input
+        type="search"
+        autocomplete="off"
+        placeholder="Search title, subtitle, or tag"
+      />
+      {
+        tags.length > 0 && (
+          <div class="tag-filter" aria-label="Filter by tag" data-tag-filters>
+            {tags.map((tag) => (
+              <button type="button" aria-pressed="false" data-tag={tag}>{tag}</button>
+            ))}
+          </div>
+        )
+      }
+      <p class="search-summary" data-search-summary></p>
+      <ol class="post-list" role="list" data-search-results></ol>
+      <noscript>
+        <PostList articles={articles} showTags />
+      </noscript>
+    </section>
+  </main>
+  <script id="search-index" type="application/json" set:html={searchIndexJson}></script>
+  <script>
+    const root = document.querySelector("[data-search-root]")
+    const input = root?.querySelector("[data-search-input]")
+    const results = root?.querySelector("[data-search-results]")
+    const summary = root?.querySelector("[data-search-summary]")
+    const filterButtons = [...(root?.querySelectorAll("[data-tag]") ?? [])]
+    const indexNode = document.querySelector("#search-index")
+    const articles = JSON.parse(indexNode?.textContent ?? "[]")
+    const selectedTags = new Set()
+    const dateFormatter = new Intl.DateTimeFormat("en-AU", {
+      dateStyle: "medium"
+    })
+
+    const escapeHtml = (value) =>
+      value.replace(/[&<>"']/g, (character) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[character])
+
+    const normalize = (value) => value.toLowerCase()
+
+    const getTagUrl = (tag) =>
+      `/tags/${tag
+        .trim()
+        .toLowerCase()
+        .replace(/['’]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "")}/`
+
+    const getSearchText = (article) =>
+      normalize([
+        article.title,
+        article.subtitle,
+        ...article.tags
+      ].join(" "))
+
+    const getMatches = () => {
+      const query = normalize(input?.value.trim() ?? "")
+
+      return articles
+        .filter((article) => !query || getSearchText(article).includes(query))
+        .filter((article) =>
+          selectedTags.size === 0 || [...selectedTags]
+            .every((tag) => article.tags.includes(tag))
+        )
+    }
+
+    const renderTags = (tags) =>
+      tags.length > 0
+        ? `
+          <ul class="tag-list" aria-label="Tags" role="list">
+            ${tags
+              .map((tag) =>
+                `<li><a href="${escapeHtml(getTagUrl(tag))}">${escapeHtml(tag)}</a></li>`
+              )
+              .join("")}
+          </ul>
+        `
+        : ""
+
+    const renderStatus = (status) =>
+      status === "published"
+        ? ""
+        : `
+          <p class="status-marker" data-article-status="${escapeHtml(status)}">
+            ${escapeHtml(status[0].toUpperCase() + status.slice(1))}
+          </p>
+        `
+
+    const renderArticle = (article) => `
+      <li class="post-list__item">
+        <article class="post-card" data-article-status="${escapeHtml(article.status)}">
+          <h2><a href="${escapeHtml(article.url)}">${escapeHtml(article.title)}</a></h2>
+          ${renderStatus(article.status)}
+          ${article.subtitle ? `<p class="post-card__summary">${escapeHtml(article.subtitle)}</p>` : ""}
+          <p class="post-card__meta">
+            <time datetime="${escapeHtml(article.created)}">
+              ${escapeHtml(dateFormatter.format(new Date(article.created)))}
+            </time>
+          </p>
+          ${renderTags(article.tags)}
+        </article>
+      </li>
+    `
+
+    const render = () => {
+      const matches = getMatches()
+
+      if (results) {
+        results.innerHTML = matches
+          .map(renderArticle)
+          .join("")
+      }
+
+      if (summary) {
+        summary.textContent = `${matches.length} ${matches.length === 1 ? "post" : "posts"}`
+      }
+    }
+
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const tag = button.dataset.tag ?? ""
+
+        selectedTags.has(tag)
+          ? selectedTags.delete(tag)
+          : selectedTags.add(tag)
+
+        button.setAttribute("aria-pressed", String(selectedTags.has(tag)))
+        render()
+      })
+    })
+
+    input?.addEventListener("input", render)
+    render()
+  </script>
+</SiteDocument>

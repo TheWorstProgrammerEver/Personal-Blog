@@ -66,6 +66,7 @@ a:focus-visible {
 }
 
 .home,
+.page,
 .post-shell {
   width: min(calc(100% - 2rem), var(--wide-measure));
   margin-inline: auto;
@@ -73,13 +74,15 @@ a:focus-visible {
 }
 
 .home__header,
+.page__header,
 .post__header {
   display: grid;
   gap: var(--space-4);
   margin-block-end: var(--space-7);
 }
 
-.home__header {
+.home__header,
+.page__header {
   max-width: var(--measure);
 }
 
@@ -142,7 +145,8 @@ h3 {
 .post-card__meta,
 .post__meta,
 .site-backlink,
-.draft-marker {
+.search-summary,
+.status-marker {
   color: var(--ink-muted);
   font-size: 0.88rem;
 }
@@ -151,7 +155,20 @@ h3 {
   margin: 0;
 }
 
-.draft-marker {
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  color: var(--ink-muted);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+}
+
+.site-nav a {
+  text-decoration: none;
+}
+
+.status-marker {
   width: fit-content;
   padding: 0.1rem 0.45rem;
   border: 1px solid var(--accent);
@@ -159,6 +176,12 @@ h3 {
   background: var(--accent-soft);
   font-weight: 650;
   line-height: 1.35;
+}
+
+.status-marker[data-article-status="archived"] {
+  border-color: var(--line);
+  color: var(--ink-muted);
+  background: transparent;
 }
 
 .post {
@@ -183,6 +206,118 @@ h3 {
 .post__tags li::before {
   content: "#";
   color: var(--accent);
+}
+
+.post__tags a {
+  text-decoration: none;
+}
+
+.tag-list,
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding: 0;
+}
+
+.tag-list {
+  color: var(--ink-muted);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+
+.tag-list a,
+.tag-cloud a {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  text-decoration: none;
+}
+
+.tag-list a::before,
+.tag-cloud a span:first-child::before {
+  content: "#";
+  color: var(--accent);
+}
+
+.tag-cloud {
+  max-width: var(--measure);
+}
+
+.tag-cloud a {
+  padding: 0.38rem 0.65rem;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--paper-raised), transparent 24%);
+}
+
+.tag-cloud a span:last-child {
+  color: var(--ink-muted);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+
+.search-panel {
+  display: grid;
+  gap: var(--space-4);
+  max-width: var(--measure);
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.7rem 0;
+  border: 0;
+  border-block-end: 1px solid var(--line);
+  border-radius: 0;
+  color: var(--ink);
+  background: transparent;
+  font: inherit;
+}
+
+.search-input:focus {
+  border-color: var(--accent);
+  outline: 0;
+}
+
+.search-input::placeholder {
+  color: var(--ink-muted);
+}
+
+.tag-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.tag-filter button {
+  padding: 0.25rem 0.55rem;
+  border: 1px solid var(--line);
+  color: var(--ink-muted);
+  background: transparent;
+  font: inherit;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.tag-filter button::before {
+  content: "#";
+  color: var(--accent);
+}
+
+.tag-filter button[aria-pressed="true"] {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.visually-hidden {
+  position: absolute;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .prose {
@@ -264,6 +399,7 @@ h3 {
   }
 
   .home,
+  .page,
   .post-shell {
     width: min(calc(100% - 1.25rem), var(--wide-measure));
     padding-block: var(--space-7);

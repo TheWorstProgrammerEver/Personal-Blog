@@ -1,0 +1,51 @@
+---
+import type { Article } from "../lib/content/articles"
+import ArticleStatusMarker from "./ArticleStatusMarker.astro"
+import {
+  getArticleUrl,
+  getTagUrl
+} from "../lib/content/articles"
+import { formatArticleDate } from "../lib/dates"
+
+interface Props {
+  articles: Article[]
+  showTags?: boolean
+}
+
+const {
+  articles,
+  showTags = false
+} = Astro.props
+---
+
+<ol class="post-list" role="list">
+  {
+    articles.map((article) => (
+      <li class="post-list__item">
+        <article class="post-card" data-article-status={article.data.status}>
+          <h2>
+            <a href={getArticleUrl(article)}>{article.data.title}</a>
+          </h2>
+          <ArticleStatusMarker article={article} />
+          {article.data.subtitle && <p class="post-card__summary">{article.data.subtitle}</p>}
+          <p class="post-card__meta">
+            <time datetime={article.data.created.toISOString()}>
+              {formatArticleDate(article.data.created)}
+            </time>
+          </p>
+          {
+            showTags && article.data.tags.length > 0 && (
+              <ul class="tag-list" aria-label="Tags" role="list">
+                {article.data.tags.map((tag) => (
+                  <li>
+                    <a href={getTagUrl(tag)}>{tag}</a>
+                  </li>
+                ))}
+              </ul>
+            )
+          }
+        </article>
+      </li>
+    ))
+  }
+</ol>

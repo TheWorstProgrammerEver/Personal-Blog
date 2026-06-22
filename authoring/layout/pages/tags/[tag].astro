@@ -1,0 +1,37 @@
+---
+import PostList from "../../components/PostList.astro"
+import SiteDocument from "../../components/SiteDocument.astro"
+import {
+  getArticlesByTag,
+  getArticleTagSummaries
+} from "../../lib/content/articles"
+import {
+  getPageTitle,
+  siteDescription
+} from "../../lib/site"
+
+export const getStaticPaths = async () =>
+  (await getArticleTagSummaries())
+    .map((tag) => ({
+      params: { tag: tag.slug },
+      props: { tag }
+    }))
+
+const { tag } = Astro.props
+const articles = await getArticlesByTag(tag.name)
+---
+
+<SiteDocument
+  title={getPageTitle(`#${tag.name}`)}
+  metaTitle={`#${tag.name}`}
+  description={siteDescription}
+  canonicalPath={tag.url}
+>
+  <main class="page">
+    <header class="page__header">
+      <p class="site-backlink"><a href="/tags/">Tags</a></p>
+      <h1>#{tag.name}</h1>
+    </header>
+    <PostList articles={articles} showTags />
+  </main>
+</SiteDocument>
