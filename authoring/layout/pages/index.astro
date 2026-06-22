@@ -1,13 +1,34 @@
 ---
-import { getArticles } from "../lib/content/articles"
+import { getArticles, getArticleUrl } from "../lib/content/articles"
 import { siteTitle } from "../lib/site"
 import SiteDocument from "../components/SiteDocument.astro"
 
-const articleCount = (await getArticles()).length
+const articles = await getArticles()
+const articleCount = articles.length
+const dateFormatter = new Intl.DateTimeFormat("en-AU", { dateStyle: "medium" })
 ---
 
 <SiteDocument title={siteTitle}>
   <main data-article-count={articleCount}>
     <h1>{siteTitle}</h1>
+    <ol>
+      {
+        articles.map((article) => (
+          <li>
+            <article>
+              <h2>
+                <a href={getArticleUrl(article)}>{article.data.title}</a>
+              </h2>
+              {article.data.subtitle && <p>{article.data.subtitle}</p>}
+              <p>
+                <time datetime={article.data.created.toISOString()}>
+                  {dateFormatter.format(article.data.created)}
+                </time>
+              </p>
+            </article>
+          </li>
+        ))
+      }
+    </ol>
   </main>
 </SiteDocument>

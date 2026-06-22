@@ -14,6 +14,8 @@ const sortArticles = (articles: Article[]) => articles.sort(descendingByCreated)
 
 export const getArticleSlug = (article: Article) => article.id
 
+export const getArticleUrl = (article: Article) => `/writing/${getArticleSlug(article)}/`
+
 export const shouldIncludeDraftArticles = () =>
   import.meta.env.BLOG_INCLUDE_DRAFTS === "true" || !import.meta.env.PROD
 
