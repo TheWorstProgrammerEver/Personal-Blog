@@ -1,6 +1,7 @@
 ---
 import { render } from "astro:content"
 import ArticleDocument from "../../components/ArticleDocument.astro"
+import ArticleLinks from "../../components/ArticleLinks.astro"
 import ArticleStatusMarker from "../../components/ArticleStatusMarker.astro"
 import {
   getRoutableArticles,
@@ -44,6 +45,7 @@ const { Content } = await render(article)
       </header>
       <div class="prose">
         <Content />
+        <ArticleLinks links={article.data.links} />
       </div>
     </article>
   </main>

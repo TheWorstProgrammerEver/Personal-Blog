@@ -352,6 +352,51 @@ h3 {
   color: var(--ink);
 }
 
+.article-links {
+  display: grid;
+  gap: var(--space-4);
+  margin-block-start: var(--space-6);
+  padding: var(--space-5);
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--paper-raised), transparent 28%);
+}
+
+.article-links h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1rem;
+}
+
+.article-links ul {
+  display: grid;
+  gap: var(--space-3);
+  padding: 0;
+}
+
+.article-links li {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.article-links a {
+  width: fit-content;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  text-decoration: none;
+}
+
+.article-links a:hover,
+.article-links a:focus-visible {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.article-links span {
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+}
+
 .prose img {
   width: 100%;
   border: 1px solid var(--line);

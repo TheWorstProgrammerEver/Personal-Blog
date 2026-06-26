@@ -1,0 +1,29 @@
+---
+interface ArticleLink {
+  label: string
+  url: string
+  description: string
+}
+
+interface Props {
+  links: ArticleLink[]
+}
+
+const { links } = Astro.props
+---
+
+{
+  links.length > 0 && (
+    <section class="article-links" aria-labelledby="article-links-heading">
+      <h2 id="article-links-heading">Links.</h2>
+      <ul role="list">
+        {links.map(({ description, label, url }) => (
+          <li>
+            <a href={url}>{label}</a>
+            <span>{description}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
