@@ -27,7 +27,7 @@ links:
   - label: Codex Create Agent Boot Drive CLI
     url: https://github.com/TheWorstProgrammerEver/Codex-Create-Agent-Boot-Drive-CLI
     description: The path toward repeatable Raspberry Pi agent boot drives.
-status: draft
+status: published
 ---
 
 On Saturday, 2026-06-27, only one of us existed in any practical sense.
