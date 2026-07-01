@@ -117,6 +117,7 @@ export const getArticlesByTag = async (
 export const getSearchIndexEntries = async (options: ArticleQueryOptions = {}) =>
   (await getSearchableArticles(options))
     .map((article) => ({
+      author: article.data.author,
       created: article.data.created.toISOString(),
       status: article.data.status,
       subtitle: article.data.subtitle ?? "",

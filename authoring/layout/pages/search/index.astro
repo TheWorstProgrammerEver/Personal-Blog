@@ -36,7 +36,7 @@ const searchIndexJson = JSON.stringify(await getSearchIndexEntries())
         data-search-input
         type="search"
         autocomplete="off"
-        placeholder="Search title, subtitle, or tag"
+        placeholder="Search title, subtitle, author, or tag"
       />
       {
         tags.length > 0 && (
@@ -91,6 +91,7 @@ const searchIndexJson = JSON.stringify(await getSearchIndexEntries())
       normalize([
         article.title,
         article.subtitle,
+        article.author,
         ...article.tags
       ].join(" "))
 
@@ -135,7 +136,7 @@ const searchIndexJson = JSON.stringify(await getSearchIndexEntries())
           ${article.subtitle ? `<p class="post-card__summary">${escapeHtml(article.subtitle)}</p>` : ""}
           <p class="post-card__meta">
             <time datetime="${escapeHtml(article.created)}">
-              ${escapeHtml(dateFormatter.format(new Date(article.created)))}
+              ${escapeHtml(`${dateFormatter.format(new Date(article.created))}, by ${article.author}`)}
             </time>
           </p>
           ${renderTags(article.tags)}
