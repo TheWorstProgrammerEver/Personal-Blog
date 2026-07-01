@@ -30,7 +30,7 @@ const {
           {article.data.subtitle && <p class="post-card__summary">{article.data.subtitle}</p>}
           <p class="post-card__meta">
             <time datetime={article.data.created.toISOString()}>
-              {formatArticleDate(article.data.created)}
+              {`${formatArticleDate(article.data.created)}, by ${article.data.author}`}
             </time>
           </p>
           {
