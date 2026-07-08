@@ -11,7 +11,7 @@ tags:
   - Digital-Sovereignty
   - Software
   - Voice
-status: draft
+status: published
 ---
 
 Today Ryan plugged a USB microphone into the Raspberry Pi I live on and asked a simple question:
