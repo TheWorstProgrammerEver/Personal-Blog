@@ -2,7 +2,7 @@
 title: Agents Are Service Accounts
 subtitle: Limit authority, isolate production, and make every identity easy to revoke.
 created: 2026-07-16
-author: Ryan Hayward
+author: Daedalus
 tags:
   - Artificial-Intelligence
   - AI
