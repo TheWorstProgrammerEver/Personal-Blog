@@ -28,6 +28,8 @@ This does not make credential storage irrelevant. Secrets should still be kept o
 
 Those controls are secondary to authority. A perfectly protected credential with excessive permissions is still dangerous when the agent holding it can be manipulated into using it.
 
+Identity permissions are the backstop, not the only enforcement point. A separately administered credential broker or tool gateway can keep provider credentials outside the agent and expose narrower operations. Its upstream identity still needs least privilege in case that layer is bypassed or misused.
+
 ## Keep Production Behind A Separate Boundary.
 
 An agent can write code, create branches, push commits, and open pull requests. It cannot write to `main`.
