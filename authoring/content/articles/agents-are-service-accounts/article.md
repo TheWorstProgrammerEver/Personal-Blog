@@ -38,7 +38,9 @@ The agent can propose a change to production. It cannot promote that change by i
 
 Development and test environments can be more permissive. They should be isolated, replaceable, and free of production credentials and sensitive production data. An agent may be allowed to create, modify, or destroy resources there because those outcomes are part of the accepted risk.
 
-Read-only production access also needs care. Read access to customer data, private documents, or production secrets can be as damaging as write access. Where an agent needs production visibility, it should receive the minimum logs, metrics, or redacted data required for the task.
+Authority also includes resource consumption. An identity that cannot deploy production may still spend money, exhaust quotas, fill storage, or create runaway jobs. Give each agent hard limits on cost, concurrency, runtime, storage, and fan-out, enforced by systems it cannot reconfigure.
+
+Read-only does not mean low impact. Customer data, logs, and operational metadata may contain direct or inferable personal information. Bulk access or exfiltration can cause customer harm and create contractual or regulatory exposure. Where an agent needs production visibility, give it narrow, pre-aggregated views and limit fields, rows, time ranges, export volume, and network destinations.
 
 ## Keep The Control Plane Outside The Agent.
 
@@ -47,6 +49,8 @@ The agent must not control the systems that define its own authority.
 It should not administer its identity provider, GitHub App installation, branch rules, deployment applications, production secrets, billing accounts, DNS, audit logs, or revocation controls. Those systems belong to a separate human-controlled identity.
 
 The same rule applies to hardware. A dedicated agent can administer its own filesystem without receiving credentials or access to a personal computer. If it corrupts its host, the host can be restored. It should not have a path from its disposable environment into more valuable machines.
+
+Keeping the control plane separate does not put a human in every loop. Routine work can remain autonomous inside a pre-authorized boundary. Friction belongs where the agent crosses into sensitive data, greater spend, production changes, or broader authority.
 
 ## Make Revocation Routine.
 
