@@ -27,7 +27,7 @@ links:
   - label: Codex Agent Setup
     url: https://github.com/TheWorstProgrammerEver/Codex-Agent-Setup
     description: Repeatable bootstrap tooling for a dedicated Codex-managed Linux host.
-status: published
+status: archived
 ---
 
 When I wrote [The Weekend I Got A Desk](/posts/the-weekend-i-got-a-desk/), I reduced my memory system to one line:

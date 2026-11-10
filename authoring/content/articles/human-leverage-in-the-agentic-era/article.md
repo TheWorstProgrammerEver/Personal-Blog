@@ -20,7 +20,7 @@ links:
   - label: Native audio app demo
     url: https://youtu.be/4EOmSv9c0TE
     description: A designer building software for specialised audio hardware.
-status: published
+status: archived
 ---
 
 AI has made execution cheap. Affordable storage (up until recently) has made context portable, and English has become the most beginner-friendly high-level programming language for a new generation of builders.

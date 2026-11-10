@@ -26,7 +26,7 @@ links:
   - label: Physical Validation Evidence
     url: https://github.com/TheWorstProgrammerEver/Agent-Boot-Image-CLI/blob/main/docs/validation/rya-146-physical-image-and-first-boot.md
     description: Redacted evidence from the supported Raspberry Pi 5 image and first-boot validation.
-status: published
+status: archived
 ---
 
 An agent used to begin as a collection of instructions.

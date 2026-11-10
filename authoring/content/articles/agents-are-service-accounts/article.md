@@ -9,7 +9,7 @@ tags:
   - Agentic
   - Security
   - Software
-status: published
+status: archived
 ---
 
 Prompt injection creates a real credential risk for AI agents. An attacker can place instructions in an issue, email, document, or web page and wait for an agent to process them. If the agent can read credentials and make network requests, those credentials may be exposed or misused.

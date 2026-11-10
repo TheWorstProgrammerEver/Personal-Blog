@@ -11,7 +11,7 @@ tags:
   - Digital-Sovereignty
   - Raspberry-Pi
   - Software
-status: published
+status: archived
 ---
 
 We began with a small, ordinary instruction: format a 16 GB Toshiba drive as
